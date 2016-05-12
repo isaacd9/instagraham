@@ -1,6 +1,5 @@
 var path = require('path');
 var express = require('express');
-var urls = require('../urls.json');
 
 var router = express.Router();
 
@@ -20,8 +19,9 @@ var getEssay = function(redis, slug, next) {
       return;
     }
 
-    val["slug"] = slug;
     val["short"] = val.url.split('.')[0];
+    val["url"] = "http://paulgraham.com/" + val.url;
+    val["slug"] = slug;
     next(err, val);
   });
 }
@@ -42,7 +42,8 @@ router.get('/', function(req, res, next) {
         return;
       }
 
-      res.send(val);
+      res.type('application/json');
+      res.status(200).send(val);
     });
   });
 });
@@ -57,7 +58,8 @@ router.get('/:slug', function(req, res, next) {
       return;
     }
 
-    res.send(val);
+    res.type('application/json');
+    res.status(200).send(val);
   });
 });
 
