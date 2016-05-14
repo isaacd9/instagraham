@@ -106,17 +106,20 @@ if __name__ == "__main__":
     links = soup.findAll('table', {'width': '435'})[1].findAll('a')
     urls = dict()
 
+    l = len(links)
     for link in links:
         print link.text
 
+        v = 1
         for k in grabEssay(link['href']):
+
             uuid = base64.urlsafe_b64encode(os.urandom(6))
             r.hset(uuid, 'quote', k)
             r.hset(uuid, 'essay', link.text)
             r.hset(uuid, 'url', link['href'])
+            #r.hset(uuid, 'verse', str(l) + ":" + str(v))
 
-        #urls[link.text] = link['href']
+            v = v + 1
 
-    #with open('www/urls.json', 'w') as f:
-    #    json.dump(urls, f)
+        l = l - 1
 
