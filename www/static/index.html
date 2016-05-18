@@ -1,0 +1,155 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+
+    <script
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+          integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+          crossorigin="anonymous"></script>
+
+          <title>Instagraham</title>
+          <meta name="description" content="The Daily Graham">
+
+          <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet'>
+          <link href='https://fonts.googleapis.com/css?family=Lato:500' rel='stylesheet'>
+         <link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+
+         <style>
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+.jumbotron {
+  background: none;
+  padding: 5% 10%;
+  color: #555;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed #888;
+  color: #777;
+}
+
+h1 {
+  font-weight: 700;
+  margin-bottom: 5px;
+  margin-left: -.5%;
+}
+
+h2 {
+  margin-top: 5px;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.jumbotron p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  font-size: 11pt;
+}
+
+.jumbotron div{
+  margin-top: 30px;
+  max-width: 500px;
+}
+
+p.ty {
+  margin-top: 10px;
+  font-size: 7px;
+}
+         </style>
+  </head>
+
+  <body>
+    <div class="jumbotron">
+      <h1>Instagraham</h1>
+      <h2><a href="https://paulgraham.com">Paul Graham</a> As a Service</h2>
+      <h3>Your favorite Silicon Valley entrepreneur, delivered as a service.</h3>
+
+      <div>
+        <h3>API Documentation</h3>
+        <p><b>Random Endpoint</b></p>
+        <pre>GET /api/</pre>
+        <p>Returns a random passage from one of Paul Graham's great essays.</p>
+        <pre><a href="/api/">GET /api/</a></pre>
+        <pre> {
+  "url":"http://paulgraham.com/notnot.html",
+  "essay":"Why to Not Not Start a Startup",
+  "quote":"Really this just codifies what we do already. We put little
+  weight on the idea. We ask mainly out of politeness. The kind of
+  question on the application form that we really care about is the one
+  where we ask what cool things you've made. If what you've made is
+  version one of a promising startup, so much the better, but the main
+  thing we care about is whether you're good at making things. Being lead
+  developer of a popular open source project counts almost as
+  much.",
+  "short":"notnot",
+  "slug":"B5otNAKC"
+} </pre>
+        <p>Response Parameters:</p>
+        <ul>
+          <li><tt>url</tt> is the link to the full article.</li>
+          <li><tt>essay</tt> is the title of the essay this quote is derived from.</li>
+          <li><tt>quote</tt> is the passage from the essay. </li>
+          <li><tt>short</tt> is the short identifer used by P.G. in the URL to
+            refer to the essay</li>
+          <li><tt>slug</tt> is semi-permanent identifer corresponding to this
+            quote. The slug is generated non-deterministically. NOTE: Quotes
+            are served from Redis so this ID is not nescesarily permanent.</li>
+        </ul>
+        <br>
+        <p><b>Quotation Endpoint</b></p>
+        <pre>GET /api/:slug</pre>
+        <p>Returns the passage corresponding to the <tt>slug</tt> from one of Paul
+        Graham's great essays.</p>
+        <pre><a href="qKqodH9w">GET /api/B5otNAKC</a></pre>
+        <pre> {
+  "url":"http://paulgraham.com/notnot.html",
+  "essay":"Why to Not Not Start a Startup",
+  "quote":"Really this just codifies what we do already. We put little
+  weight on the idea. We ask mainly out of politeness. The kind of
+  question on the application form that we really care about is the one
+  where we ask what cool things you've made. If what you've made is
+  version one of a promising startup, so much the better, but the main
+  thing we care about is whether you're good at making things. Being lead
+  developer of a popular open source project counts almost as
+  much.",
+  "short":"notnot",
+  "slug":"B5otNAKC"
+} </pre>
+        <p>Response Parameters:</p>
+        <ul>
+          <li><tt>url</tt> is the link to the full article.</li>
+          <li><tt>essay</tt> is the title of the essay this quote is derived from.</li>
+          <li><tt>quote</tt> is the passage from the essay. </li>
+          <li><tt>short</tt> is the short identifer used by P.G. in the URL to
+            refer to the essay</li>
+          <li><tt>slug</tt> is semi-permanent identifer corresponding to this
+            quote. The slug is generated non-deterministically. NOTE: Quotes
+            are served from Redis so this ID is not nescesarily permanent.</li>
+        </ul>
+      </div>
+      <p><b>Notes</b></p>
+      <p>All responses carry MIME type <tt>application/json</tt></p>
+      <p>HTTP requests will respond with a 301 to the HTTPS endpoint</p>
+
+
+      <p class="ty">Made by Isaac Diamond. Thanks to Michael Shi.</p>
+    </div>
+  </body>
+</html>
+
