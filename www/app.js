@@ -6,12 +6,14 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var winston = require('winston');
 var bodyParser = require('body-parser');
-var redis = require('redis');
-client = redis.createClient();
 
 var routes = require('./routes/index');
 
+var quotes = require('./quotes.json');
+
 var app = express();
+
+winston.level = 'info';
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -21,7 +23,12 @@ app.use(cookieParser());
 app.use(compression());
 
 app.use(function(req, res, next) {
-  req.redis = client;
+  // Get keys
+  req.keys = Object.keys(quotes);
+
+  // Copy quotes into memory
+  req.quotes = {};
+  req.quotes = Object.assign(req.quotes, quotes);
   next();
 });
 

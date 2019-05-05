@@ -5,62 +5,50 @@ var router = express.Router();
 
 /* GET home page. */
 
-var getEssay = function(redis, slug, next) {
-  redis.hgetall(slug, function(err, val) {
-    if (err) {
-      next(err);
-      return;
-    }
+var makeResponse = function(quotes, key) {
+  var val = quotes[key];
 
-    if (!val) {
-      var err = new Error('Not Found');
-      err.status = 404;
-      next(err);
-      return;
-    }
+  val["short"] = val.url.split('.')[0];
+  val["url"] = "http://paulgraham.com/" + val.url;
+  val["id"] = key;
+  val["slug"] = key;
 
-    val["short"] = val.url.split('.')[0];
-    val["url"] = "http://paulgraham.com/" + val.url;
-    val["slug"] = slug;
-    next(err, val);
-  });
+  return val
 }
 
 router.get('/', function(req, res, next) {
   var redis = req.redis;
 
-  redis.randomkey(function(err, key) {
-    if (err) {
-      next(err);
-      return;
-    }
+  var key = req.keys[
+    Math.floor(Math.random(req.keys.length - 1) * req.keys.length)
+  ]
 
-    var slug = key;
-    getEssay(redis, slug, function(err, val) {
-      if (err) {
-        next(err);
-        return;
-      }
+  var body = makeResponse(req.quotes, key);
 
-      res.type('application/json');
-      res.status(200).send(val);
-    });
-  });
+  if (!body) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+    return;
+  }
+
+  res.type('application/json');
+  res.status(200).send(body);
 });
 
 router.get('/:slug', function(req, res, next) {
-  var redis = req.redis;
   var slug = req.params.slug;
 
-  getEssay(redis, slug, function(err, val) {
-    if (err) {
-      next(err);
-      return;
-    }
+  var body = makeResponse(req.quotes, slug);
+  if (!body) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+    return;
+  }
 
-    res.type('application/json');
-    res.status(200).send(val);
-  });
+  res.type('application/json');
+  res.status(200).send(body);
 });
 
 module.exports = router;
