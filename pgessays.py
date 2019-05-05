@@ -13,6 +13,7 @@ import redis
 import json
 import os
 import base64
+import sys
 from BeautifulSoup import BeautifulSoup
 
 def goodP(p):
@@ -101,25 +102,27 @@ if __name__ == "__main__":
     soup = BeautifulSoup(page)
     soup.prettify()
 
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
-
+    quotes = {}
     links = soup.findAll('table', {'width': '435'})[1].findAll('a')
-    urls = dict()
 
     l = len(links)
     for link in links:
-        print link.text
+        sys.stderr.write(link.text + "\n")
 
         v = 1
         for k in grabEssay(link['href']):
-
+            quote = {
+                    'quote': k,
+                    'essay': link.text,
+                    'url': link['href'],
+            }
             uuid = base64.urlsafe_b64encode(os.urandom(6))
-            r.hset(uuid, 'quote', k)
-            r.hset(uuid, 'essay', link.text)
-            r.hset(uuid, 'url', link['href'])
+            quotes[uuid] = quote
             #r.hset(uuid, 'verse', str(l) + ":" + str(v))
 
             v = v + 1
 
         l = l - 1
+
+    print(json.dumps(quotes, indent=1))
 
